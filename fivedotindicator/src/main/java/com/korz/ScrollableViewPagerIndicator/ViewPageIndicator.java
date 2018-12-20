@@ -171,10 +171,12 @@ public class ViewPageIndicator extends FrameLayout {
         } else {
             manager.scrollToPositionWithOffset(currentPage - maxDotCount / 2, 0);
         }
+
         recyclerView.addOnScrollListener(new OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 setStateForVisibleDots(currentPage);
+                recyclerView.removeOnScrollListener(this);
             }
         });
 
