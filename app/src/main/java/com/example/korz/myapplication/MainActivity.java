@@ -21,7 +21,9 @@ public class MainActivity extends AppCompatActivity {
         SimplePagerAdapter simplePagerAdapter = new SimplePagerAdapter(getSupportFragmentManager());
         viewPager = findViewById(R.id.viewPager);
         viewPager.setAdapter(simplePagerAdapter);
+
         viewPageIndicator = findViewById(R.id.viewPageIndicator);
+        viewPager.setCurrentItem(9);
         viewPageIndicator.setViewPager(viewPager);
         tabLayout = findViewById(R.id.tabLayout);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);

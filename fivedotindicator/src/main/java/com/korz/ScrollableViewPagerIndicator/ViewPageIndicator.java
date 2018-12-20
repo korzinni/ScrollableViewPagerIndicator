@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ public class ViewPageIndicator extends FrameLayout {
     int currentPage;
     int maxDotCount;
     int totalCount;
+    int widthItem;
 
     public ViewPageIndicator(@NonNull Context context) {
         super(context);
@@ -55,6 +57,7 @@ public class ViewPageIndicator extends FrameLayout {
         recyclerView = new RecyclerView(context);
         adapter = new DotRecyclerViewAdapter(params);
         maxDotCount = params.getMaxDotCount();
+        widthItem = params.getActiveDotSize() + params.getDotMargin() * 2;
         manager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
@@ -74,7 +77,7 @@ public class ViewPageIndicator extends FrameLayout {
             recyclerView.setLayoutParams(layoutParams);
         }
 
-
+        adapter.setCount(totalCount);
         pager.addOnPageChangeListener(new OnPageChangeListener() {
             float lastOffset;
 
@@ -93,48 +96,11 @@ public class ViewPageIndicator extends FrameLayout {
                     return;
                 }
                 lastOffset = offset;
-                int widthItem = recyclerView.getChildAt(0).getWidth();
-                int currentActiveDot;
-                int willBeActiveDot;
-                int lastDot;
-                int firstDot;
-                if (currentPage == position) {//swipe to left
-                    currentActiveDot = position;
-                    willBeActiveDot = position + 1;
-                    firstDot = currentActiveDot - maxDotCount / 2;//will be gone to left
-                    lastDot = willBeActiveDot + maxDotCount / 2;//will be appear from right
-
-                    changeState(State.INACTIVE_STATE, State.ACTIVE_STATE, willBeActiveDot, offset);
-                    changeState(State.ACTIVE_STATE, State.INACTIVE_STATE, currentActiveDot, offset);
-                    if (needScroll(currentActiveDot)) {
-                        manager.scrollToPositionWithOffset(firstDot + 1, (int) (widthItem * (1 - offset)));
-                        changeState(State.OUT_SIDE_STATE,
-                                lastDot == totalCount - 1
-                                        ? State.INACTIVE_STATE
-                                        : State.EDGE_STATE,
-                                lastDot, offset);
-                        changeState(State.EDGE_STATE, State.INACTIVE_STATE, lastDot - 1, offset);
-                        changeState(State.EDGE_STATE, State.OUT_SIDE_STATE, firstDot, offset);
-                        changeState(State.INACTIVE_STATE, State.EDGE_STATE, firstDot + 1, offset);
-
-                    }
-                } else {//swipe to right: reverse offset
-                    currentActiveDot = position + 1;
-                    willBeActiveDot = position;
-                    firstDot = willBeActiveDot - maxDotCount / 2;//will be appear from left
-                    lastDot = currentActiveDot + maxDotCount / 2;//will be gone to right
-
-                    changeState(State.ACTIVE_STATE, State.INACTIVE_STATE, currentActiveDot, 1 - offset);
-                    changeState(State.INACTIVE_STATE, State.ACTIVE_STATE, willBeActiveDot, 1 - offset);
-                    if (needScroll(willBeActiveDot)) {
-                        manager.scrollToPositionWithOffset(firstDot, (int) (-widthItem * offset));
-                        changeState(State.OUT_SIDE_STATE, firstDot == 0 ? State.INACTIVE_STATE : State.EDGE_STATE, firstDot, 1 - offset);
-                        changeState(State.EDGE_STATE, State.INACTIVE_STATE, firstDot + 1, 1 - offset);
-                        changeState(State.EDGE_STATE, State.OUT_SIDE_STATE, lastDot, 1 - offset);
-                        changeState(State.INACTIVE_STATE, State.EDGE_STATE, lastDot - 1, 1 - offset);
-                    }
+                if (currentPage == position) {
+                    moveToLeft(position, offset);
+                } else {
+                    moveToRight(position, offset);
                 }
-
             }
 
             @Override
@@ -147,9 +113,8 @@ public class ViewPageIndicator extends FrameLayout {
 
                 switch (scrollState) {
                     case ViewPager.SCROLL_STATE_IDLE:
-                        currentPage = pager.getCurrentItem();
                         ignoreOnPageScrolled = true;
-                        setStateForVisibleDots(currentPage);
+                        setupPosition(pager.getCurrentItem());
                         break;
                     case ViewPager.SCROLL_STATE_DRAGGING:
                         ignoreOnPageScrolled = false;
@@ -160,15 +125,7 @@ public class ViewPageIndicator extends FrameLayout {
                 }
             }
         });
-        adapter.setCount(totalCount);
-        currentPage = pager.getCurrentItem();
-        post(new Runnable() {
-            @Override
-            public void run() {
-                setStateForVisibleDots(currentPage);
-            }
-        });
-
+        setupPosition(pager.getCurrentItem());
     }
 
     private boolean needScroll(int position) {
@@ -195,7 +152,31 @@ public class ViewPageIndicator extends FrameLayout {
     private void setState(@State final int state, int position) {
         final Dot dot = getDot(position);
         if (dot != null)
-            dot.setState(state);
+            dot.post(new Runnable() {
+                @Override
+                public void run() {
+                    dot.setState(state);
+                }
+            });
+
+    }
+
+    private void setupPosition(int position) {
+        currentPage = position;
+        if (currentPage < maxDotCount / 2) {
+            manager.scrollToPositionWithOffset(0, 0);
+        } else if (currentPage > totalCount - maxDotCount / 2) {
+            manager.scrollToPositionWithOffset(totalCount - maxDotCount, 0);
+        } else {
+            manager.scrollToPositionWithOffset(currentPage - maxDotCount / 2, 0);
+        }
+        recyclerView.addOnScrollListener(new OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                setStateForVisibleDots(currentPage);
+            }
+        });
+
     }
 
     private void setStateForVisibleDots(int selectedPosition) {
@@ -224,7 +205,46 @@ public class ViewPageIndicator extends FrameLayout {
         for (int i = firstVisiblePosition + 1; i < lastVisiblePosition; i++) {
             setState(i == selectedPosition ? State.ACTIVE_STATE : State.INACTIVE_STATE, i);
         }
+
     }
+
+    private void moveToLeft(int position, float offset) {
+        int currentActiveDot = position;
+        int willBeActiveDot = position + 1;
+        int firstDot = currentActiveDot - maxDotCount / 2;//will be gone to left
+        int lastDot = willBeActiveDot + maxDotCount / 2;//will be appear from right
+
+        changeState(State.INACTIVE_STATE, State.ACTIVE_STATE, willBeActiveDot, offset);
+        changeState(State.ACTIVE_STATE, State.INACTIVE_STATE, currentActiveDot, offset);
+        if (needScroll(currentActiveDot)) {
+            manager.scrollToPositionWithOffset(firstDot + 1, (int) (widthItem * (1 - offset)));
+
+            changeState(State.EDGE_STATE, State.OUT_SIDE_STATE, firstDot, offset);
+            changeState(State.INACTIVE_STATE, State.EDGE_STATE, firstDot + 1, offset);
+            changeState(State.EDGE_STATE, State.INACTIVE_STATE, lastDot - 1, offset);
+            changeState(State.OUT_SIDE_STATE, lastDot == totalCount - 1 ? State.INACTIVE_STATE : State.EDGE_STATE, lastDot, offset);
+
+        }
+    }
+
+    private void moveToRight(int position, float offset) {
+        int currentActiveDot = position + 1;
+        int willBeActiveDot = position;
+        int firstDot = willBeActiveDot - maxDotCount / 2;//will be appear from left
+        int lastDot = currentActiveDot + maxDotCount / 2;//will be gone to right
+
+        changeState(State.ACTIVE_STATE, State.INACTIVE_STATE, currentActiveDot, 1 - offset);
+        changeState(State.INACTIVE_STATE, State.ACTIVE_STATE, willBeActiveDot, 1 - offset);
+        if (needScroll(willBeActiveDot)) {
+            manager.scrollToPositionWithOffset(firstDot, (int) (-widthItem * offset));
+
+            changeState(State.OUT_SIDE_STATE, firstDot == 0 ? State.INACTIVE_STATE : State.EDGE_STATE, firstDot, 1 - offset);
+            changeState(State.EDGE_STATE, State.INACTIVE_STATE, firstDot + 1, 1 - offset);
+            changeState(State.INACTIVE_STATE, State.EDGE_STATE, lastDot - 1, 1 - offset);
+            changeState(State.EDGE_STATE, State.OUT_SIDE_STATE, lastDot, 1 - offset);
+        }
+    }
+
 
     /**
      * class container for store custom attributes for {@link ViewPageIndicator}

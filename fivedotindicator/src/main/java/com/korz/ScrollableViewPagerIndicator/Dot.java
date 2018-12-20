@@ -2,8 +2,6 @@ package com.korz.ScrollableViewPagerIndicator;
 
 import android.animation.ArgbEvaluator;
 import android.content.Context;
-import android.support.animation.DynamicAnimation;
-import android.support.animation.SpringAnimation;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -20,8 +18,6 @@ import static com.korz.ScrollableViewPagerIndicator.Dot.State.OUT_SIDE_STATE;
 
 public class Dot extends android.support.v7.widget.AppCompatImageView {
 
-    final SpringAnimation springScaleX = new SpringAnimation(this, DynamicAnimation.SCALE_X);
-    final SpringAnimation springScaleY = new SpringAnimation(this, DynamicAnimation.SCALE_Y);
     int activeColor;
     int inactiveColor;
     float inactiveFinalScale = 0.75f;
@@ -157,8 +153,8 @@ public class Dot extends android.support.v7.widget.AppCompatImageView {
         }
 
         setColorFilter(getTransitionColor(endColor, startColor, progress));
-        springScaleX.animateToFinalPosition(scaleRatio);
-        springScaleY.animateToFinalPosition(scaleRatio);
+        setScaleX(scaleRatio);
+        setScaleY(scaleRatio);
     }
 
     public void setState(@State int state) {
