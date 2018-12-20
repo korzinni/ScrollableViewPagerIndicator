@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ViewPageIndicator">
+        <attr name="activeColor" format="color" />
+        <attr name="inactiveColor" format="color" />
+        <attr name="inactiveFinalScale" format="float" />
+        <attr name="edgeFinalScale" format="float" />
+        <attr name="activeDotSize" format="dimension" />
+        <attr name="dotMargin" format="dimension" />
+        <attr name="maxDotCount" format="integer" />
+    </declare-styleable>
+</resources>
