@@ -114,7 +114,8 @@ public class ViewPageIndicator extends FrameLayout {
                 switch (scrollState) {
                     case ViewPager.SCROLL_STATE_IDLE:
                         ignoreOnPageScrolled = true;
-                        setupPosition(pager.getCurrentItem());
+                        currentPage = pager.getCurrentItem();
+                        setStateForVisibleDots(currentPage);
                         break;
                     case ViewPager.SCROLL_STATE_DRAGGING:
                         ignoreOnPageScrolled = false;
@@ -163,7 +164,6 @@ public class ViewPageIndicator extends FrameLayout {
 
     private void setupPosition(int position) {
         currentPage = position;
-        setStateForVisibleDots(currentPage);
         if (currentPage < maxDotCount / 2) {
             manager.scrollToPositionWithOffset(0, 0);
         } else if (currentPage > totalCount - maxDotCount / 2) {
