@@ -163,6 +163,7 @@ public class ViewPageIndicator extends FrameLayout {
 
     private void setupPosition(int position) {
         currentPage = position;
+        setStateForVisibleDots(currentPage);
         if (currentPage < maxDotCount / 2) {
             manager.scrollToPositionWithOffset(0, 0);
         } else if (currentPage > totalCount - maxDotCount / 2) {
