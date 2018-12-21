@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
+import android.widget.TextView;
 
 import com.korz.ScrollableViewPagerIndicator.Dot.State;
 import com.korz.ScrollableViewPagerIndicator.DotRecyclerViewAdapter.DotHolder;
@@ -39,14 +40,17 @@ public class DotRecyclerViewAdapter extends RecyclerView.Adapter<DotHolder> {
         layoutParams.rightMargin = params.getDotMargin();
         layoutParams.leftMargin = params.getDotMargin();
         Dot dot = new Dot(context, params);
+        TextView textView = new TextView(viewGroup.getContext());
+        textView.setGravity(Gravity.CENTER);
         dot.setState(State.INACTIVE_STATE);
         frameLayout.addView(dot, layoutParams);
-        return new DotHolder(frameLayout, dot);
+        frameLayout.addView(textView, layoutParams);
+        return new DotHolder(frameLayout);
     }
 
     @Override
     public void onBindViewHolder(@NonNull DotHolder dotHolder, int i) {
-
+        dotHolder.textView.setText("" + i);
     }
 
     @Override
@@ -57,14 +61,21 @@ public class DotRecyclerViewAdapter extends RecyclerView.Adapter<DotHolder> {
     public static class DotHolder extends ViewHolder {
 
         Dot dot;
+        TextView textView;
 
-        public DotHolder(@NonNull View itemView, Dot dot) {
+        public DotHolder(@NonNull View itemView) {
             super(itemView);
-            this.dot = dot;
+            ViewGroup viewGroup = (ViewGroup) itemView;
+            this.dot = (Dot) viewGroup.getChildAt(0);
+            this.textView = (TextView) viewGroup.getChildAt(1);
         }
 
         public Dot getDot() {
             return dot;
+        }
+
+        public TextView getTextView() {
+            return textView;
         }
     }
 

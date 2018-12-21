@@ -71,7 +71,7 @@ public class ViewPageIndicator extends FrameLayout {
     public void setViewPager(final ViewPager pager) {
         totalCount = pager.getAdapter().getCount();
         //change size recycler for actual dot count
-        if (totalCount < maxDotCount) {
+        if (totalCount <= maxDotCount) {
             LayoutParams layoutParams = (LayoutParams) recyclerView.getLayoutParams();
             layoutParams.width = (params.getDotMargin() * 2 + params.getActiveDotSize()) * totalCount;
             recyclerView.setLayoutParams(layoutParams);
@@ -87,9 +87,9 @@ public class ViewPageIndicator extends FrameLayout {
                 //offset - (values from 0 to 1) offset of page defined by position
                 //for swipe to left position == currentPage position and offset start from 0 and end 1
                 //for swipe to right position == currentPage position -1 and offset start from 1 and end 0
-                if (ignoreOnPageScrolled) {
-                    return;
-                }
+//                if (ignoreOnPageScrolled) {
+//                    return;
+//                }
                 //ignore first offset == 0 for next page
                 if (offset == 0 && offset < lastOffset - 0.5f) {
                     lastOffset = offset;
@@ -186,23 +186,27 @@ public class ViewPageIndicator extends FrameLayout {
         int firstVisiblePosition = selectedPosition < totalCount - maxDotCount / 2
                 ? selectedPosition - maxDotCount / 2
                 : totalCount - maxDotCount;
+        if (firstVisiblePosition < 0)
+            firstVisiblePosition = 0;
         // if first visible dot represent first page in list it shown how INACTIVE, else how EDGE.
         //if dot's position in list equals current selected page shown how ACTIVE
-        setState(firstVisiblePosition > 0
-                ? State.EDGE_STATE
-                : selectedPosition == firstVisiblePosition
+        setState(selectedPosition == firstVisiblePosition
                 ? State.ACTIVE_STATE
+                : firstVisiblePosition > 0
+                ? State.EDGE_STATE
                 : State.INACTIVE_STATE, firstVisiblePosition);
 
-        int lastVisiblePosition = selectedPosition > maxDotCount / 2
+        int lastVisiblePosition = selectedPosition >= maxDotCount / 2
                 ? selectedPosition + maxDotCount / 2
                 : maxDotCount - 1;
+        if (lastVisiblePosition > totalCount - 1)
+            lastVisiblePosition = totalCount - 1;
         // if last visible dot represent last page in list it shown how INACTIVE, else how EDGE.
         //if dot's position in list equals current selected page shown how ACTIVE
-        setState(lastVisiblePosition < totalCount - 1
-                ? State.EDGE_STATE
-                : lastVisiblePosition == selectedPosition
+        setState(lastVisiblePosition == selectedPosition
                 ? State.ACTIVE_STATE
+                : lastVisiblePosition < totalCount - 1
+                ? State.EDGE_STATE
                 : State.INACTIVE_STATE, lastVisiblePosition);
         //all dots from firstVisible to lastVisible set how INACTIVE if they position =! position of current page
         for (int i = firstVisiblePosition + 1; i < lastVisiblePosition; i++) {
