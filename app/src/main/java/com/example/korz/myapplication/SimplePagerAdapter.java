@@ -25,6 +25,6 @@ public class SimplePagerAdapter extends FragmentPagerAdapter {
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        return "page " + (position + 1);
+        return "page " + (position);
     }
 }
