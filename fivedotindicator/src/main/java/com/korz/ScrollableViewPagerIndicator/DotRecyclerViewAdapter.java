@@ -40,17 +40,17 @@ public class DotRecyclerViewAdapter extends RecyclerView.Adapter<DotHolder> {
         layoutParams.rightMargin = params.getDotMargin();
         layoutParams.leftMargin = params.getDotMargin();
         Dot dot = new Dot(context, params);
-        TextView textView = new TextView(viewGroup.getContext());
-        textView.setGravity(Gravity.CENTER);
         dot.setState(State.INACTIVE_STATE);
         frameLayout.addView(dot, layoutParams);
-        frameLayout.addView(textView, layoutParams);
+//        TextView textView = new TextView(viewGroup.getContext());
+//        textView.setGravity(Gravity.CENTER);
+//        frameLayout.addView(textView, layoutParams);
         return new DotHolder(frameLayout);
     }
 
     @Override
     public void onBindViewHolder(@NonNull DotHolder dotHolder, int i) {
-        dotHolder.textView.setText("" + i);
+        //dotHolder.textView.setText("" + i);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class DotRecyclerViewAdapter extends RecyclerView.Adapter<DotHolder> {
             super(itemView);
             ViewGroup viewGroup = (ViewGroup) itemView;
             this.dot = (Dot) viewGroup.getChildAt(0);
-            this.textView = (TextView) viewGroup.getChildAt(1);
+            //this.textView = (TextView) viewGroup.getChildAt(1);
         }
 
         public Dot getDot() {
