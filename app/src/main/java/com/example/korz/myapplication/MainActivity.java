@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(simplePagerAdapter);
 
         viewPageIndicator = findViewById(R.id.viewPageIndicator);
-        viewPager.setCurrentItem(9);
+        viewPager.setCurrentItem(1);
         viewPageIndicator.setViewPager(viewPager);
         tabLayout = findViewById(R.id.tabLayout);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
