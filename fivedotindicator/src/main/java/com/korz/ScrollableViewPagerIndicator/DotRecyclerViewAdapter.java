@@ -40,7 +40,7 @@ public class DotRecyclerViewAdapter extends RecyclerView.Adapter<DotHolder> {
         layoutParams.rightMargin = params.getDotMargin();
         layoutParams.leftMargin = params.getDotMargin();
         Dot dot = new Dot(context, params);
-        dot.setState(State.INACTIVE_STATE);
+        dot.setState(State.OUT_SIDE_STATE);
         frameLayout.addView(dot, layoutParams);
 //        TextView textView = new TextView(viewGroup.getContext());
 //        textView.setGravity(Gravity.CENTER);
