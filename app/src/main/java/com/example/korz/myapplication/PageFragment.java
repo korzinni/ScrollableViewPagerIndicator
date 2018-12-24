@@ -1,25 +1,27 @@
 package com.example.korz.myapplication;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 public class PageFragment extends Fragment {
 
-    private static final String ARG_COLOR = "color";
+    private static final String POSITION = "position";
 
-    private int color;
+    private int position;
 
     public PageFragment() {
         // Required empty public constructor
     }
 
-    public static PageFragment newInstance(int color) {
+    public static PageFragment newInstance(int position) {
         PageFragment fragment = new PageFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_COLOR, color);
+        args.putInt(POSITION, position);
         fragment.setArguments(args);
         return fragment;
     }
@@ -28,13 +30,15 @@ public class PageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            color = getArguments().getInt(ARG_COLOR);
+            position = getArguments().getInt(POSITION);
         }
+        Log.d("pagerFragmentState", "onCreate: " + position);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d("pagerFragmentState", "onCreateView: " + position);
         View view = inflater.inflate(R.layout.fragment_page_activity, container, false);
         View view1 = view.findViewById(R.id.frame);
         View view2 = view.findViewById(R.id.view1);
@@ -43,8 +47,54 @@ public class PageFragment extends Fragment {
         view2.setScaleX(0.75f);
         view2.setScaleX(0.75f);
         view3.setScaleX(0.75f);
-        view1.setBackgroundColor(color);
         return view;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.d("pagerFragmentState", "onAttach: " + position);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d("pagerFragmentState", "onStart: " + position);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("pagerFragmentState", "onResume: " + position);
+    }
+
+    @Override
+    public void onPause() {
+        Log.d("pagerFragmentState", "onPause: " + position);
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        Log.d("pagerFragmentState", "onStop: " + position);
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroyView() {
+        Log.d("pagerFragmentState", "onDestroyView: " + position);
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.d("pagerFragmentState", "onDestroy: " + position);
+        super.onDestroy();
+    }
+
+    @Override
+    public void onDetach() {
+        Log.d("pagerFragmentState", "onDetach: " + position);
+        super.onDetach();
+    }
 }

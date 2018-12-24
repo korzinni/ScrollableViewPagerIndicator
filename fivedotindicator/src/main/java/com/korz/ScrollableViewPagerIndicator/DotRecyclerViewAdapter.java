@@ -29,6 +29,12 @@ public class DotRecyclerViewAdapter extends RecyclerView.Adapter<DotHolder> {
         notifyDataSetChanged();
     }
 
+    public void updateCount(int newCount) {
+        int delta = newCount - this.count;
+        this.count = newCount;
+        notifyItemRangeInserted(newCount - count, delta);
+    }
+
     @NonNull
     @Override
     public DotHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {

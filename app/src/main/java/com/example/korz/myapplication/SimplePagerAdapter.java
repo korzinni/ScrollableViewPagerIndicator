@@ -11,15 +11,22 @@ public class SimplePagerAdapter extends FragmentPagerAdapter {
         super(fm);
     }
 
+    int count;
+
     @Override
     public Fragment getItem(int i) {
         Color color = new Color();
-        return PageFragment.newInstance(0);
+        return PageFragment.newInstance(i);
     }
 
     @Override
     public int getCount() {
-        return 10;
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+        notifyDataSetChanged();
     }
 
     @Nullable

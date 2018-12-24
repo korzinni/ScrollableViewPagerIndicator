@@ -68,6 +68,18 @@ public class ViewPageIndicator extends FrameLayout {
         addView(recyclerView, layoutParams);
     }
 
+    public void updateCount(final ViewPager pager) {
+        totalCount = pager.getAdapter().getCount();
+        //change size recycler for actual dot count
+        if (totalCount <= maxDotCount) {
+            LayoutParams layoutParams = (LayoutParams) recyclerView.getLayoutParams();
+            layoutParams.width = (params.getDotMargin() * 2 + params.getActiveDotSize()) * totalCount;
+            recyclerView.setLayoutParams(layoutParams);
+        }
+
+        adapter.updateCount(totalCount);
+    }
+
     public void setViewPager(final ViewPager pager) {
         totalCount = pager.getAdapter().getCount();
         //change size recycler for actual dot count
