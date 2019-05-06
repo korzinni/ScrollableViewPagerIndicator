@@ -26,7 +26,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tabMode="scrollable" />
 
-    <com.korz.ScrollableViewPagerIndicator.ViewPageIndicator
+    <com.korz.indicator.ViewPageIndicator
         android:id="@+id/viewPageIndicator"
         android:layout_width="300dp"
         android:layout_height="wrap_content"

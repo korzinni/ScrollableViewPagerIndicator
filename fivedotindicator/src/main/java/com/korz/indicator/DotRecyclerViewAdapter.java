@@ -1,4 +1,4 @@
-package com.korz.ScrollableViewPagerIndicator;
+package com.korz.indicator;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -11,9 +11,9 @@ import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.TextView;
 
-import com.korz.ScrollableViewPagerIndicator.Dot.State;
-import com.korz.ScrollableViewPagerIndicator.DotRecyclerViewAdapter.DotHolder;
-import com.korz.ScrollableViewPagerIndicator.ViewPageIndicator.ViewParams;
+import com.korz.indicator.Dot.State;
+import com.korz.indicator.DotRecyclerViewAdapter.DotHolder;
+import com.korz.indicator.ViewPageIndicator.ViewParams;
 
 public class DotRecyclerViewAdapter extends RecyclerView.Adapter<DotHolder> {
 

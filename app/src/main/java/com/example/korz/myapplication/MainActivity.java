@@ -6,7 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.app.AppCompatActivity;
 
-import com.korz.ScrollableViewPagerIndicator.ViewPageIndicator;
+import com.korz.indicator.ViewPageIndicator;
 
 public class MainActivity extends AppCompatActivity {
 

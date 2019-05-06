@@ -1,4 +1,4 @@
-package com.korz.ScrollableViewPagerIndicator;
+package com.korz.indicator;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;

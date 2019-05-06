@@ -1,4 +1,4 @@
-package com.korz.ScrollableViewPagerIndicator;
+package com.korz.indicator;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

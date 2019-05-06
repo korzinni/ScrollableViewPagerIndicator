@@ -1,4 +1,4 @@
-package com.korz.ScrollableViewPagerIndicator;
+package com.korz.indicator;
 
 import org.junit.Test;
 

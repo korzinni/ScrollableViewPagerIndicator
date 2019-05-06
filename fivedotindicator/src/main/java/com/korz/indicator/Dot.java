@@ -1,4 +1,4 @@
-package com.korz.ScrollableViewPagerIndicator;
+package com.korz.indicator;
 
 import android.animation.ArgbEvaluator;
 import android.content.Context;
@@ -8,15 +8,15 @@ import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
-import com.korz.ScrollableViewPagerIndicator.ViewPageIndicator.ViewParams;
+import com.korz.indicator.ViewPageIndicator.ViewParams;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import static com.korz.ScrollableViewPagerIndicator.Dot.State.ACTIVE_STATE;
-import static com.korz.ScrollableViewPagerIndicator.Dot.State.EDGE_STATE;
-import static com.korz.ScrollableViewPagerIndicator.Dot.State.INACTIVE_STATE;
-import static com.korz.ScrollableViewPagerIndicator.Dot.State.OUT_SIDE_STATE;
+import static com.korz.indicator.Dot.State.ACTIVE_STATE;
+import static com.korz.indicator.Dot.State.EDGE_STATE;
+import static com.korz.indicator.Dot.State.INACTIVE_STATE;
+import static com.korz.indicator.Dot.State.OUT_SIDE_STATE;
 
 public class Dot extends android.support.v7.widget.AppCompatImageView {
 
