@@ -14,6 +14,9 @@ import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import androidx.viewpager2.widget.ViewPager2;
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback;
+
 import com.korz.ScrollableViewPagerIndicator.Dot.State;
 
 /**
@@ -91,6 +94,67 @@ public class ViewPageIndicator extends FrameLayout {
 
         adapter.setCount(totalCount);
         pager.addOnPageChangeListener(new OnPageChangeListener() {
+            float lastOffset;
+
+            @Override
+            public void onPageScrolled(int position, float offset, int i1) {
+                //position - edge left visible page
+                //offset - (values from 0 to 1) offset of page defined by position
+                //for swipe to left position == currentPage position and offset start from 0 and end 1
+                //for swipe to right position == currentPage position -1 and offset start from 1 and end 0
+//                if (ignoreOnPageScrolled) {
+//                    return;
+//                }
+                //ignore first offset == 0 for next page
+                if (offset == 0 && offset < lastOffset - 0.5f) {
+                    lastOffset = offset;
+                    return;
+                }
+                lastOffset = offset;
+                if (currentPage == position) {
+                    moveToLeft(position, offset);
+                } else {
+                    moveToRight(position, offset);
+                }
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int scrollState) {
+
+                switch (scrollState) {
+                    case ViewPager.SCROLL_STATE_IDLE:
+                        ignoreOnPageScrolled = true;
+                        currentPage = pager.getCurrentItem();
+                        setStateForVisibleDots(currentPage);
+                        break;
+                    case ViewPager.SCROLL_STATE_DRAGGING:
+                        ignoreOnPageScrolled = false;
+                        break;
+                    case ViewPager.SCROLL_STATE_SETTLING:
+                        ignoreOnPageScrolled = false;
+                        break;
+                }
+            }
+        });
+        setupPosition(pager.getCurrentItem());
+    }
+
+    public void setViewPager(final ViewPager2 pager) {
+        totalCount = pager.getAdapter().getItemCount();
+        //change size recycler for actual dot count
+        if (totalCount <= maxDotCount) {
+            LayoutParams layoutParams = (LayoutParams) recyclerView.getLayoutParams();
+            layoutParams.width = (params.getDotMargin() * 2 + params.getActiveDotSize()) * totalCount;
+            recyclerView.setLayoutParams(layoutParams);
+        }
+
+        adapter.setCount(totalCount);
+        pager.registerOnPageChangeCallback(new OnPageChangeCallback() {
             float lastOffset;
 
             @Override
