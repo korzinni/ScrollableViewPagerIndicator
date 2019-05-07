@@ -161,7 +161,13 @@ public class ViewPageIndicator extends FrameLayout {
                 }
             }
         });
-        setupPosition(pager.getCurrentItem());
+        pager.post(new Runnable() {
+            @Override
+            public void run() {
+                setupPosition(pager.getCurrentItem());
+            }
+        });
+
     }
 
     public void setViewPager(final ViewPager2 pager) {
@@ -226,7 +232,12 @@ public class ViewPageIndicator extends FrameLayout {
                 }
             }
         });
-        setupPosition(pager.getCurrentItem());
+        pager.post(new Runnable() {
+            @Override
+            public void run() {
+                setupPosition(pager.getCurrentItem());
+            }
+        });
     }
 
     private boolean needScroll(int position) {
