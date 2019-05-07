@@ -232,12 +232,12 @@ public class ViewPageIndicator extends FrameLayout {
                 }
             }
         });
-        pager.post(new Runnable() {
+        pager.postDelayed(new Runnable() {
             @Override
             public void run() {
                 setupPosition(pager.getCurrentItem());
             }
-        });
+        },100);
     }
 
     private boolean needScroll(int position) {
