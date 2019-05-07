@@ -32,6 +32,9 @@ public class ViewPageIndicator extends FrameLayout {
 
     ViewParams params;
 
+    ViewPager viewPager;
+    ViewPager2 viewPager2;
+
     boolean ignoreOnPageScrolled = true;
 
     int currentPage;
@@ -97,6 +100,10 @@ public class ViewPageIndicator extends FrameLayout {
     }
 
     public void setViewPager(final ViewPager pager) {
+        if (viewPager == pager) {
+            return;
+        }
+        viewPager = pager;
         totalCount = pager.getAdapter().getCount();
         //change size recycler for actual dot count
         if (totalCount <= maxDotCount) {
@@ -158,6 +165,10 @@ public class ViewPageIndicator extends FrameLayout {
     }
 
     public void setViewPager(final ViewPager2 pager) {
+        if (viewPager2 == pager) {
+            return;
+        }
+        viewPager2 = pager;
         totalCount = pager.getAdapter().getItemCount();
         //change size recycler for actual dot count
         if (totalCount <= maxDotCount) {
