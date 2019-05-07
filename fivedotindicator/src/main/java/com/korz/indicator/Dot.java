@@ -2,12 +2,17 @@ package com.korz.indicator;
 
 import android.animation.ArgbEvaluator;
 import android.content.Context;
-import android.support.animation.DynamicAnimation;
-import android.support.animation.SpringAnimation;
-import android.support.annotation.IntDef;
-import android.support.annotation.Nullable;
+import android.content.res.ColorStateList;
+import android.graphics.PorterDuff.Mode;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageView;
+
+import androidx.annotation.IntDef;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.dynamicanimation.animation.DynamicAnimation;
+import androidx.dynamicanimation.animation.SpringAnimation;
 
 import com.korz.indicator.ViewPageIndicator.ViewParams;
 
@@ -19,7 +24,7 @@ import static com.korz.indicator.Dot.State.EDGE_STATE;
 import static com.korz.indicator.Dot.State.INACTIVE_STATE;
 import static com.korz.indicator.Dot.State.OUT_SIDE_STATE;
 
-public class Dot extends View {
+public class Dot extends AppCompatImageView {
 
     final SpringAnimation springScaleX = new SpringAnimation(this, DynamicAnimation.SCALE_X, 1);
     final SpringAnimation springScaleY = new SpringAnimation(this, DynamicAnimation.SCALE_Y, 1);
@@ -58,7 +63,7 @@ public class Dot extends View {
         inactiveFinalScale = params.getInactiveFinalScale();
         edgeFinalScale = params.getEdgeFinalScale();
 
-        setBackground(context.getResources().getDrawable(R.drawable.circle));
+        setImageDrawable(context.getResources().getDrawable(R.drawable.circle));
     }
 
     public void changeStateTo(@State int targetState, float progress) {
@@ -158,7 +163,7 @@ public class Dot extends View {
                 break;
         }
 
-        setBackgroundColor(getTransitionColor(endColor, startColor, progress));
+        setColorFilter(getTransitionColor(endColor, startColor, progress), Mode.DST_ATOP);
         springScaleX.animateToFinalPosition(scaleRatio);
         springScaleY.animateToFinalPosition(scaleRatio);
     }

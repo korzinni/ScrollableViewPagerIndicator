@@ -1,11 +1,12 @@
 package com.example.korz.myapplication;
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.support.v7.app.AppCompatActivity;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager.widget.ViewPager.OnPageChangeListener;
+
+import com.google.android.material.tabs.TabLayout;
 import com.korz.indicator.ViewPageIndicator;
 
 public class MainActivity extends AppCompatActivity {

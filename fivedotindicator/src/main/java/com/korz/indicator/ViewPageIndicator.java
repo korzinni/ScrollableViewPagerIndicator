@@ -2,18 +2,18 @@ package com.korz.indicator;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager.widget.ViewPager.OnPageChangeListener;
 import androidx.viewpager2.widget.ViewPager2;
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback;
 
@@ -73,6 +73,19 @@ public class ViewPageIndicator extends FrameLayout {
 
     public void updateCount(final ViewPager pager) {
         totalCount = pager.getAdapter().getCount();
+        //change size recycler for actual dot count
+        if (totalCount <= maxDotCount) {
+            LayoutParams layoutParams = (LayoutParams) recyclerView.getLayoutParams();
+            layoutParams.width = (params.getDotMargin() * 2 + params.getActiveDotSize()) * totalCount;
+            recyclerView.setLayoutParams(layoutParams);
+        }
+
+        adapter.updateCount(totalCount);
+    }
+
+
+    public void updateCount(final ViewPager2 pager) {
+        totalCount = pager.getAdapter().getItemCount();
         //change size recycler for actual dot count
         if (totalCount <= maxDotCount) {
             LayoutParams layoutParams = (LayoutParams) recyclerView.getLayoutParams();
