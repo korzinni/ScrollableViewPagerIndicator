@@ -7,6 +7,7 @@ import android.support.animation.SpringAnimation;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.View;
 
 import com.korz.indicator.ViewPageIndicator.ViewParams;
 
@@ -18,7 +19,7 @@ import static com.korz.indicator.Dot.State.EDGE_STATE;
 import static com.korz.indicator.Dot.State.INACTIVE_STATE;
 import static com.korz.indicator.Dot.State.OUT_SIDE_STATE;
 
-public class Dot extends android.support.v7.widget.AppCompatImageView {
+public class Dot extends View {
 
     final SpringAnimation springScaleX = new SpringAnimation(this, DynamicAnimation.SCALE_X, 1);
     final SpringAnimation springScaleY = new SpringAnimation(this, DynamicAnimation.SCALE_Y, 1);
@@ -57,7 +58,7 @@ public class Dot extends android.support.v7.widget.AppCompatImageView {
         inactiveFinalScale = params.getInactiveFinalScale();
         edgeFinalScale = params.getEdgeFinalScale();
 
-        setImageDrawable(context.getResources().getDrawable(R.drawable.circle));
+        setBackground(context.getResources().getDrawable(R.drawable.circle));
     }
 
     public void changeStateTo(@State int targetState, float progress) {
@@ -157,7 +158,7 @@ public class Dot extends android.support.v7.widget.AppCompatImageView {
                 break;
         }
 
-        setColorFilter(getTransitionColor(endColor, startColor, progress));
+        setBackgroundColor(getTransitionColor(endColor, startColor, progress));
         springScaleX.animateToFinalPosition(scaleRatio);
         springScaleY.animateToFinalPosition(scaleRatio);
     }
